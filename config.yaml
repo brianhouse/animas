@@ -1,0 +1,24 @@
+log: True
+
+start_date: 2014-01-01
+
+mongo:
+    host: localhost
+    port: 27017
+    database: animas
+
+sites:
+  '09358550': Cement Creek, Silverton
+  '09359020': Animas River, Silverton
+  '09361500': Animas River, Durango
+
+tz: America/Denver
+
+labels:
+  '00065': gage_height_ft
+  '00060': discharge_fps
+  '00095': conductance_us
+  '00010': temperature_c
+  '00400': pH
+  '63680': turbidity_fnu
+  'site_no': site
