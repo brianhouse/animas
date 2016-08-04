@@ -1,6 +1,6 @@
 log: True
 
-start_date: 2014-01-01
+start_date: 2016-07-01
 
 mongo:
     host: localhost
@@ -21,4 +21,3 @@ labels:
   '00010': temperature_c
   '00400': pH
   '63680': turbidity_fnu
-  'site_no': site

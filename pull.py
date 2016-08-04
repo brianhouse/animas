@@ -53,12 +53,12 @@ for site, name in config['sites'].items():
         if nop is None:
             nop = params
             continue
-        data = {fields[f]: strings.as_numeric(param.strip()) for (f, param) in enumerate(params)}
-        data = {key: value for (key, value) in data.items() if "_cd" not in key}
-        if 'datetime' not in data or 'site' not in data:
+        data = {fields[f]: param for (f, param) in enumerate(params)}
+        data = {(key if key != 'site_no' else 'site'): (strings.as_numeric(value.strip()) if key != 'site_no' else value) for (key, value) in data.items()}
+        data = {key: (value if type(value) != str or len(value) else None) for (key, value) in data.items() if "_cd" not in key}
+        if 'datetime' not in data:
             continue
         data['t_utc'] = util.timestamp(util.parse_date(data['datetime'], tz=config['tz']))
-        data['site'] = str(data['site'])
         log.info(json.dumps(data, indent=4))
         try:
             entry_id = db.entries.insert_one(data).inserted_id
