@@ -18,10 +18,13 @@ print(json.dumps(results[0], indent=4, default=lambda d: str(d)))
 
 ts = [d['t_utc'] for d in results]
 
-for i, label in enumerate(config['labels'].values()):
+labels = list(config['labels'].values())
+labels.sort()
+for i, label in enumerate(labels):
     log.info(label)
     try:
-        values = [d[label] if label in d else 0 for d in results]
+        values = [d[label] if label in d else None for d in results]
+        values = sp.remove_shots(values, nones=True)  # repair missing values    
         signal = sp.resample(ts, values)
         signal = sp.normalize(signal)
         color = colors[i]
@@ -33,3 +36,4 @@ for i, label in enumerate(config['labels'].values()):
         log.error(values)
 
 ctx.output("charts/")
+
