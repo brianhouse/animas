@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import json
+import numpy as np
 import signal_processing as sp
 from housepy import config, log, util, drawing
 from mongo import db
@@ -17,7 +18,7 @@ results = list(results)
 print(json.dumps(results[0], indent=4, default=lambda d: str(d)))
 
 ts = [d['t_utc'] for d in results]
-
+signals = []
 labels = list(config['labels'].values())
 labels.sort()
 for i, label in enumerate(labels):
@@ -27,6 +28,7 @@ for i, label in enumerate(labels):
         values = sp.remove_shots(values, nones=True)  # repair missing values    
         signal = sp.resample(ts, values)
         signal = sp.normalize(signal)
+        signals.append(signal)        
         color = colors[i]
         ctx.plot(signal, stroke=color, thickness=2)
         ctx.line(10 / ctx.width, 1 - ((10 + (i * 10)) / ctx.height), 30 / ctx.width, 1 - ((10 + (i * 10)) / ctx.height), stroke=color, thickness=2)
@@ -37,3 +39,10 @@ for i, label in enumerate(labels):
 
 ctx.output("charts/")
 
+points = []
+for i in range(len(signals[0])):
+    point = [signal[i] for signal in signals]
+    points.append(point)
+
+points = np.array(points)
+util.save("data/%s.pkl" % util.timestamp(), points)
