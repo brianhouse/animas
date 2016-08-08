@@ -7,7 +7,8 @@ from sklearn import manifold, decomposition, cluster
 from housepy import config, log, util, drawing
 from colors import colors
 
-points = util.load("data/1470432105.pkl")
+# points = util.load("data/1470432105.pkl")   # last week
+points = util.load("data/1470593687.pkl")   # last two weeks
 log.info("INPUT: %s POINTS, %s DIMENSIONS" % points.shape)
 # points = manifold.Isomap().fit_transform(points)
 # points = manifold.LocallyLinearEmbedding(method="modified").fit_transform(points)
@@ -31,12 +32,12 @@ centroids = np.column_stack((sp.normalize(centroids[:,0], np.min(points[:,0]), n
 points = np.column_stack((sp.normalize(points[:,0], np.min(points[:,0]), np.max(points[:,0])), sp.normalize(points[:,1], np.min(points[:,1]), np.max(points[:,1]))))
 
 
-ctx = drawing.Context(500, 500)#, hsv=True)
+ctx = drawing.Context(500, 500, hsv=True)
 
 for i, point in enumerate(points):
     pos = i / len(points)
-    # ctx.arc(point[0], point[1], 2/ctx.width, 2/ctx.height, thickness=0.0, fill=(0.35 + (pos * 0.65), 1.0, 1.0))
-    ctx.arc(point[0], point[1], 2/ctx.width, 2/ctx.height, thickness=0.0, fill=colors[labels[i]])
+    ctx.arc(point[0], point[1], 2/ctx.width, 2/ctx.height, thickness=0.0, fill=(0.35 + (pos * 0.65), 1.0, 1.0))
+    # ctx.arc(point[0], point[1], 2/ctx.width, 2/ctx.height, thickness=0.0, fill=colors[labels[i]])
     if i == 0:
         continue
     prev = points[i-1]
@@ -46,11 +47,10 @@ for i, point in enumerate(points):
 for centroid in centroids:
     ctx.arc(centroid[0], centroid[1], 2/ctx.width, 2/ctx.height, thickness=5.0)
 
-# for i in range(100):
-#     pos = i / 100
-#     ctx.arc(pos, 20 / ctx.width, 3/ctx.width, 3/ctx.height, thickness=0.0, fill=(0.35 + (pos * 0.65), 1.0, 1.0))
+for i in range(100):
+    pos = i / 100
+    ctx.arc(pos, 20 / ctx.width, 3/ctx.width, 3/ctx.height, thickness=0.0, fill=(0.35 + (pos * 0.65), 1.0, 1.0))
 
 ctx.output("charts/")
 
 
-## fix this please so that you dont split the numpy axes and just do it together

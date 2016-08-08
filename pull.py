@@ -55,7 +55,7 @@ for site, name in config['sites'].items():
             continue
         data = {fields[f]: param for (f, param) in enumerate(params)}
         data = {(key if key != 'site_no' else 'site'): (strings.as_numeric(value.strip()) if key != 'site_no' else value) for (key, value) in data.items()}
-        data = {key: (value if type(value) != str or len(value) else None) for (key, value) in data.items() if "_cd" not in key}
+        data = {key: value for (key, value) in data.items() if "_cd" not in key and (type(value) != str or (key == 'site' or key == 'datetime'))}
         if 'datetime' not in data:
             continue
         data['t_utc'] = util.timestamp(util.parse_date(data['datetime'], tz=config['tz']))

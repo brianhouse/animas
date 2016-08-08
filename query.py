@@ -7,11 +7,24 @@ from housepy import config, log, util, drawing
 from mongo import db
 from colors import colors
 
-ctx = drawing.Context(1200, 500, margin=20)
+ctx = drawing.Context(1200, 500, margin=20, hsv=True)
 
-site = '09358550'
+site = "09358550"
+# start = "2016-04-07"
+# start = "2016-04-15"
+
+# stop = "2016-04-16"
+# start = "2016-05-01"
+
+start = "2016-04-06"
+# start = "2016-04-15"
+# stop = "2016-05-30"
+
+start = "2016-08-01"
+stop = "2016-08-07"
+
 print(config['sites'][site])
-query = {'site': site, 't_utc': {'$gt': util.timestamp(util.parse_date("2016-07-28", tz=config['tz']))}}
+query = {'site': site, 't_utc': {'$gt': util.timestamp(util.parse_date(start, tz=config['tz'])), '$lt': util.timestamp(util.parse_date(stop, tz=config['tz']))}}
 log.info(query)
 results = db.entries.find(query)
 results = list(results)
@@ -25,15 +38,17 @@ for i, label in enumerate(labels):
     log.info(label)
     try:
         values = [d[label] if label in d else None for d in results]
-        values = sp.remove_shots(values, nones=True)  # repair missing values    
+        values = sp.remove_shots(values, nones=True)  # repair missing values
         signal = sp.resample(ts, values)
         signal = sp.normalize(signal)
+        signal = sp.smooth(signal, 15)
         signals.append(signal)        
-        color = colors[i]
+        # color = colors[i]
+        color = i / len(labels), .8, .8, 1.
         ctx.plot(signal, stroke=color, thickness=2)
         ctx.line(10 / ctx.width, 1 - ((10 + (i * 10)) / ctx.height), 30 / ctx.width, 1 - ((10 + (i * 10)) / ctx.height), stroke=color, thickness=2)
         ctx.label(35 / ctx.width, 1 - ((13 + (i * 10)) / ctx.height), label.upper(), size=8)            
-    except Exception as e:
+    except KeyError as e:
         log.error(log.exc(e))
         log.error(values)
 
