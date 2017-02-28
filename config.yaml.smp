@@ -3,9 +3,10 @@ log: True
 start_date: 2016-04-06
 
 server:
+    host: localhost
     port: 5280
 
-mongo:
+mongo:  
     host: localhost
     port: 27017
     database: animas
