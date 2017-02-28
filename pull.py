@@ -19,7 +19,7 @@ log.info("END_DATE %s" % end_date)
 
 for site, name in config['sites'].items():
 
-    url = "http://nwis.waterdata.usgs.gov/usa/nwis/uv/?cb_00065=on&cb_00060=on&cb_00095=on&cb_00010=on&cb_00400=on&cb_63680=on&format=rdb&site_no=%s&period=&begin_date=%s&end_date=%s" % (site, start_date, end_date)
+    url = "https://nwis.waterdata.usgs.gov/usa/nwis/uv/?cb_00065=on&cb_00060=on&cb_00095=on&cb_00010=on&cb_00400=on&cb_63680=on&format=rdb&site_no=%s&period=&begin_date=%s&end_date=%s" % (site, start_date, end_date)
     log.info("%s: %s" % (site, name))
     log.info(url)
     try:
@@ -39,8 +39,10 @@ for site, name in config['sites'].items():
     for line in lines:
         line = line.strip()
         if not len(line):
+            log.warning("--> skipping blank")  
             continue
         if line[0] == '#':
+            log.warning("--> skipping comment")  
             continue
         params = line.split('\t')
         if fields is None:        
@@ -49,14 +51,17 @@ for site, name in config['sites'].items():
                 for (key, label) in config['labels'].items():
                     if key in field and "_cd" not in field:
                         fields[f] = label
+            log.warning("--> grabbed params: %s" % fields)            
             continue
         if nop is None:
             nop = params
+            log.warning("--> nop")
             continue
         data = {fields[f]: param for (f, param) in enumerate(params)}
         data = {(key if key != 'site_no' else 'site'): (strings.as_numeric(value.strip()) if key != 'site_no' else value) for (key, value) in data.items()}
         data = {key: value for (key, value) in data.items() if "_cd" not in key and (type(value) != str or (key == 'site' or key == 'datetime'))}
         if 'datetime' not in data:
+            log.warning("datetime mising")
             continue
         data['t_utc'] = util.timestamp(util.parse_date(data['datetime'], tz=config['tz']))
         log.info(json.dumps(data, indent=4))

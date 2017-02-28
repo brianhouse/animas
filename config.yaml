@@ -2,6 +2,9 @@ log: True
 
 start_date: 2016-04-06
 
+server:
+    port: 5280
+
 mongo:
     host: localhost
     port: 27017

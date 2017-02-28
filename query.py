@@ -9,7 +9,9 @@ from colors import colors
 
 ctx = drawing.Context(1200, 500, margin=20, hsv=True)
 
-site = "09358550"
+site = "09358550" # cement creek
+site = "09359020" # silverton
+
 # start = "2016-04-07"
 # start = "2016-04-15"
 
@@ -23,6 +25,11 @@ start = "2016-04-06"
 start = "2016-07-07"
 # start = "2016-08-01"
 stop = "2016-08-07"
+
+start = "2017-01-01"
+
+start = "2016-11-01"
+stop = "2017-02-27"
 
 print(config['sites'][site])
 query = {'site': site, 't_utc': {'$gt': util.timestamp(util.parse_date(start, tz=config['tz'])), '$lt': util.timestamp(util.parse_date(stop, tz=config['tz']))}}
