@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import json, datetime, requests
-from housepy import config, log, util, strings
+from housepy import config, log, timeutil, strings
 from mongo import db, DESCENDING, DuplicateKeyError
 
 
@@ -11,7 +11,7 @@ try:
 except Exception:
     start_date = config['start_date']
 log.info("START_DATE %s" % start_date)
-today = util.dt(tz=config['tz'])
+today = timeutil.get_dt(tz=config['tz'])
 yesterday = today - datetime.timedelta(days=1)
 end_date = yesterday.strftime("%Y-%m-%d")
 log.info("END_DATE %s" % end_date)
@@ -63,7 +63,7 @@ for site, name in config['sites'].items():
         if 'datetime' not in data:
             log.warning("datetime mising")
             continue
-        data['t_utc'] = util.timestamp(util.parse_date(data['datetime'], tz=config['tz']))
+        data['t_utc'] = timeutil.t_utc(timeutil.string_to_dt(data['datetime'], tz=config['tz']))
         log.info(json.dumps(data, indent=4))
         try:
             entry_id = db.entries.insert_one(data).inserted_id

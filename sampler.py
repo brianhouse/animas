@@ -3,18 +3,18 @@
 import json, datetime
 import numpy as np
 import signal_processing as sp
-from housepy import config, log, util, strings
+from housepy import config, log, timeutil, strings
 from sklearn import manifold, decomposition, cluster
 from mongo import db, DESCENDING
 
 def sample(draw=False):
     log.info("START SAMPLE")
     # get the time
-    # dt = util.dt(tz=config['tz'])
+    # dt = timeutil.get_dt(tz=config['tz'])
     # dt -= datetime.timedelta(days=300)  # time adjustment if necessary for testing
-    # t_utc = util.timestamp(dt)
-    t_utc = util.timestamp()
-    log.info(util.datestring(t_utc, tz=config['tz']))
+    # t_utc = timeutil.t_utc(dt)
+    t_utc = timeutil.t_utc()
+    log.info(timeutil.get_string(t_utc, tz=config['tz']))
 
     # pull the last 24 hours
     log.info(config['sites'][config['sample']])
