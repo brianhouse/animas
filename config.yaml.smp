@@ -18,6 +18,8 @@ sites:
 
 sample: '09361500'
 
+metal: copper
+
 tz: America/Denver
 
 labels:
