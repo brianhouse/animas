@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
-from housepy import server, config, log
+from housepy import server, config, log, process
 from sampler import sample
+
+process.secure_pid(os.path.join(os.path.dirname(__file__), "run"))
 
 METALS = 'iron', 'aluminum', 'copper', 'lead'
 
