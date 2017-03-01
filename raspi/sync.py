@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
-import requests, os
+import requests, os, time, random
 from housepy import config, log
 
+time.sleep(random.random() * 10.0)  # random delay to give the server some breathing room
 
 try:
     r = requests.get("http://%s:%s/%s" % (config['server']['host'], config['server']['port'], config['metal']))

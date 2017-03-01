@@ -4,18 +4,19 @@ import json, datetime, requests
 from housepy import config, log, timeutil, strings
 from mongo import db, DESCENDING, DuplicateKeyError
 
+"""
+USGS updates every 1-4 hours, so run this every hour. It pulls all the data for the given sites.
+
+"""
 
 try:
     # find most recent entry
     start_date = db.entries.find().sort([('t_utc', DESCENDING)]).limit(1)[0]['datetime'].split(' ')[0]
 except Exception:
     start_date = config['start_date']
+end_date = timeutil.get_dt(tz=config['tz']).strftime("%Y-%m-%d")
 log.info("START_DATE %s" % start_date)
-today = timeutil.get_dt(tz=config['tz'])
-yesterday = today - datetime.timedelta(days=1)
-end_date = yesterday.strftime("%Y-%m-%d")
 log.info("END_DATE %s" % end_date)
-
 
 for site, name in config['sites'].items():
 
@@ -30,7 +31,6 @@ for site, name in config['sites'].items():
         log.error(url)
         continue
 
-
     lines = response.split('\n')
     log.info("%s lines" % len(lines))
     fields = None
@@ -39,10 +39,10 @@ for site, name in config['sites'].items():
     for line in lines:
         line = line.strip()
         if not len(line):
-            log.warning("--> skipping blank")  
+            # log.warning("--> skipping blank")  
             continue
         if line[0] == '#':
-            log.warning("--> skipping comment")  
+            # log.warning("--> skipping comment")  
             continue
         params = line.split('\t')
         if fields is None:        
@@ -51,17 +51,17 @@ for site, name in config['sites'].items():
                 for (key, label) in config['labels'].items():
                     if key in field and "_cd" not in field:
                         fields[f] = label
-            log.warning("--> grabbed params: %s" % fields)            
+            # log.warning("--> grabbed params: %s" % fields)            
             continue
         if nop is None:
             nop = params
-            log.warning("--> nop")
+            # log.warning("--> nop")
             continue
         data = {fields[f]: param for (f, param) in enumerate(params)}
         data = {(key if key != 'site_no' else 'site'): (strings.as_numeric(value.strip()) if key != 'site_no' else value) for (key, value) in data.items()}
         data = {key: value for (key, value) in data.items() if "_cd" not in key and (type(value) != str or (key == 'site' or key == 'datetime'))}
         if 'datetime' not in data:
-            log.warning("datetime mising")
+            log.warning("datetime missing")
             continue
         data['t_utc'] = timeutil.t_utc(timeutil.string_to_dt(data['datetime'], tz=config['tz']))
         log.info(json.dumps(data, indent=4))
