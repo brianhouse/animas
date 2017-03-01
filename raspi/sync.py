@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-import requests, os, time, random
+import requests, os, time, random, sys
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 from housepy import config, log
 
 time.sleep(random.random() * 10.0)  # random delay to give the server some breathing room
