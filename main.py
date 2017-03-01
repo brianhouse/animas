@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import os
 from housepy import server, config, log, process
 from sampler import sample
 
