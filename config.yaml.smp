@@ -16,6 +16,8 @@ sites:
   '09359020': Animas River, Silverton
   '09361500': Animas River, Durango
 
+sample: '09361500'
+
 tz: America/Denver
 
 labels:

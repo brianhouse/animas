@@ -10,7 +10,7 @@ from housepy import config, log, util, chart
 # points, rates = util.load("data/1470593687.pkl")   # last two weeks
 # points, rates = util.load("data/1470681705.pkl")   # smoothed!
 # points, rates = util.load("data/1470681860.pkl")   # not smoothed!
-points, rates = util.load("data/last.pkl")
+points, rates = util.load("data/last_snap.pkl")
 log.info("INPUT: %s POINTS, %s DIMENSIONS" % points.shape)
 # points = manifold.Isomap().fit_transform(points)
 # points = manifold.LocallyLinearEmbedding(method="modified").fit_transform(points)

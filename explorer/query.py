@@ -11,6 +11,7 @@ ctx = drawing.Context(1200, 500, margin=20, hsv=True)
 
 site = "09358550" # cement creek
 site = "09359020" # silverton
+site = "09361500" # durango
 
 # start = "2016-04-07"
 # start = "2016-04-15"
@@ -18,18 +19,16 @@ site = "09359020" # silverton
 # stop = "2016-04-16"
 # start = "2016-05-01"
 
-start = "2016-04-06"
-# start = "2016-04-15"
-# stop = "2016-05-30"
+# start = "2016-04-06"
+start = "2016-04-15"
+stop = "2016-05-30"
 
-start = "2016-07-07"
+# start = "2016-07-07"
 # start = "2016-08-01"
-stop = "2016-08-07"
+# stop = "2016-08-07"
 
-start = "2017-01-01"
-
-start = "2016-11-01"
-stop = "2017-02-27"
+start = "2017-02-27"
+stop = "2017-03-01"
 
 print(config['sites'][site])
 query = {'site': site, 't_utc': {'$gt': util.timestamp(util.parse_date(start, tz=config['tz'])), '$lt': util.timestamp(util.parse_date(stop, tz=config['tz']))}}

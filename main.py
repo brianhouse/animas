@@ -1,19 +1,20 @@
 #!/usr/bin/env python3
 
-from housepy import server
+from housepy import server, config, log
+from sampler import sample
+
+METALS = 'iron', 'aluminum', 'copper', 'lead'
 
 class Home(server.Handler):
 
     def get(self, page=None):
-        if page == "iron":
-            return self.text("iron")
-        if page == "aluminum":
-            return self.text("aluminum")
-        if page == "copper":
-            return self.text("copper")
-        if page == "lead":
-            return self.text("lead")
-        return self.text("OK")
+        if page in METALS:
+            point = sample()
+            level = point[METALS.index(page)]
+            level = int(level * 100) / 100.0
+            log.info("%s: %s" % (page, level))
+            return self.text(str(level))
+        return self.text("ANIMAS: %s" % (METALS,))
 
 handlers = [
     (r"/?([^/]*)", Home),
