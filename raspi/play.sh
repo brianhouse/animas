@@ -1,1 +1,1 @@
-pd -nogui -verbose -audiodev 1 -r 48000 playback.pd
+pd -nogui -verbose -audiodev 1 -r 48000 /home/pi/animas/raspi/playback.pd
