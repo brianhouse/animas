@@ -14,7 +14,7 @@ class Home(server.Handler):
         if page in METALS:
             point = sample()
             level = point[METALS.index(page)]
-            level = ((int(level * 100) / 100.0) * .9) + 0.1 # always maintain some level
+            level = int((level * 90) + 10) / 100.0  # .1 - 1.
             log.info("%s: %s" % (page, level))
             return self.text(str(level))
         return self.text("ANIMAS: %s" % (METALS,))
