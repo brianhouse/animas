@@ -16,7 +16,8 @@ class Home(server.Handler):
             level = point[METALS.index(page)]
             level = int((level * 90) + 10) / 100.0  # .1 - 1.
             log.info("%s: %s" % (page, level))
-            return self.text(str(level))
+            # return self.text(str(level))
+            return self.text(str(1.0))
         return self.text("ANIMAS: %s" % (METALS,))
 
 handlers = [
