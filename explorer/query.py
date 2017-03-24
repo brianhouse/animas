@@ -3,7 +3,7 @@
 import json
 import numpy as np
 import signal_processing as sp
-from housepy import config, log, util, drawing, strings
+from housepy import config, log, util, drawing, strings, timeutil
 from mongo import db
 from colors import colors
 
@@ -31,7 +31,7 @@ start = "2017-02-27"
 stop = "2017-03-01"
 
 print(config['sites'][site])
-query = {'site': site, 't_utc': {'$gt': util.timestamp(util.parse_date(start, tz=config['tz'])), '$lt': util.timestamp(util.parse_date(stop, tz=config['tz']))}}
+query = {'site': site, 't_utc': {'$gt': timeutil.timestamp(timeutil.string_to_dt(start, tz=config['tz'])), '$lt': timeutil.timestamp(timeutil.string_to_dt(stop, tz=config['tz']))}}
 log.info(query)
 results = db.entries.find(query)
 results = list(results)
