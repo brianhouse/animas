@@ -19,9 +19,9 @@ discharge_cfs.sort(key=lambda d: d['t_utc'])
 print(discharge_cfs[0])
 print(discharge_cfs[-1])
 
-streams = { 'discharge_cfs': discharge_cfs,
+streams = { #'discharge_cfs': discharge_cfs,
             'ph': ph,
-            'oxygen_mgl': oxygen,
+            #'oxygen_mgl': oxygen,
             }
 
 log.info("Processing...")

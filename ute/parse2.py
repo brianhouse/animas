@@ -20,27 +20,33 @@ with open(PATH) as csvfile:
     for r, row in enumerate(reader):
         if r < 2:
             continue
-        try:
-            if len(''.join(row).strip()) == 0:
-                continue
-
-            row = [strings.as_numeric(item) for item in row]
-            row = [(None if type(item) == str and not len(item) else item) for item in row]
-            
-            dt_1 = timeutil.string_to_dt(row[0], tz="America/Denver")
-            t_utc_1 = timeutil.timestamp(dt_1)
-            datestring_1 = timeutil.t_to_string(t_utc_1, tz="America/Denver") 
-            ph.append(dict(zip(['t_utc', 'ph'], [t_utc_1, row[1]])))
-
-            dt_2 = timeutil.string_to_dt(row[2], tz="America/Denver")
-            t_utc_2 = timeutil.timestamp(dt_2)
-            datestring_2 = timeutil.t_to_string(t_utc_2, tz="America/Denver") 
-            discharge_cfs.append(dict(zip(['t_utc', 'discharge_cfs'], [t_utc_2, row[3]])))
-
-        except Exception as e:
+        if len(''.join(row).strip()) == 0:
             continue
-            # print(e)
-            # print(row)
+
+        row = [strings.as_numeric(item) for item in row]
+        row = [(None if type(item) == str and not len(item) else item) for item in row]
+        
+        try:
+            if row[0] is not None:
+                dt_1 = timeutil.string_to_dt(row[0], tz="America/Denver")
+                t_utc_1 = timeutil.timestamp(dt_1)
+                datestring_1 = timeutil.t_to_string(t_utc_1, tz="America/Denver") 
+                ph.append(dict(zip(['t_utc', 'ph'], [t_utc_1, row[1]])))
+        except Exception as e:
+            print('1')
+            print(log.exc(e))
+            print(row)
+
+        try:
+            if row[2] is not None:
+                dt_2 = timeutil.string_to_dt(row[2], tz="America/Denver")
+                t_utc_2 = timeutil.timestamp(dt_2)
+                datestring_2 = timeutil.t_to_string(t_utc_2, tz="America/Denver") 
+                discharge_cfs.append(dict(zip(['t_utc', 'discharge_cfs'], [t_utc_2, row[3]])))
+        except Exception as e:
+            print('2')
+            print(log.exc(e))
+            row()
 
 print("Sorting...")
 ph.sort(key=lambda d: d['t_utc'])
