@@ -1,2 +1,2 @@
-@reboot /home/pi/animas/raspi/sync.py
+@reboot sleep 2; /home/pi/animas/raspi/sync.py; sleep 2; /home/pi/animas/raspi/play.sh
 * * * * * /home/pi/animas/raspi/sync.py
